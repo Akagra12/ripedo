@@ -1,0 +1,36 @@
+const express = require("express");
+const router = express.Router();
+
+router.post("/test", (req, res) => {
+    console.log("Received data:", req.body); // Debugging
+    if (!req.body || Object.keys(req.body).length === 0) {
+        return res.status(400).json({ error: "Request body is missing or empty" });
+    }
+    res.json({ message: "Data received successfully", data: req.body });
+});
+
+module.exports = router;
+
+
+
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2FlZTA5N2NhODYzNTBjZGE0OTUzYTkiLCJpYXQiOjE3Mzk1MTQwMDcsImV4cCI6MTczOTYwMDQwN30.ibyaA5ytE05ysO7F2ViF57sEzgsK_R3Mqcc6C6rVim8",
+    "captain": {
+        "fullname": {
+            "firstname": "Akagra",
+            "lastname": "Gangwar"
+        },
+        "email": "akagra@gmail.com",
+        "password": "$2b$10$2DiD2thB0VQ9fyBoiJO.M.ls6lHl8SGAGdYB.FBu5wZTclljCnvMK",
+        "status": "inactive",
+        "vehicle": {
+            "color": "red",
+            "plate": "UP16 BJ 8462",
+            "capacity": 2,
+            "vehicleType": "car"
+        },
+        "_id": "67aee097ca86350cda4953a9",
+        "__v": 0
+    }
+}
