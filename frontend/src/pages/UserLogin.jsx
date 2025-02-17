@@ -1,35 +1,36 @@
 // import React from "react";
-import  { useState,  } from 'react'
+import  { useState, useContext } from 'react'
 import { Link } from 'react-router-dom'
-// import { UserDataContext } from '../context/UserContext'
-// import { useNavigate } from 'react-router-dom'
-// import axios from 'axios'
+import { UserDataContext } from '../context/UserContext'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 const UserLogin=() => {
     const [ email, setEmail ] = useState('')
     const [ password, setPassword ] = useState('')
     const [userData, setUserData] = useState({ });
 
-    // const { user, setUser } = useContext(UserDataContext)
-    // const navigate = useNavigate()
+    const { user, setUser } = useContext(UserDataContext)
+    const navigate = useNavigate()
 
 
 
     const submitHandler = async (e) => {
         e.preventDefault();
     
-        setUserData ({
+        const userData = {
             email: email,
             password: password
-        });
-    //     const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/login`, userData)
+        }
 
-    //     if (response.status === 200) {
-    //         const data = response.data
-    //         setUser(data.user)
-    //         localStorage.setItem('token', data.token)
-    //         navigate('/home')
-    //     }
+        const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/login`, userData)
+
+        if (response.status === 200) {
+            const data = response.data
+            setUser(data.user)
+            localStorage.setItem('token', data.token)
+            navigate('/home')
+        }
         // console.log(email,password);
         setEmail('')
         setPassword('')
@@ -49,7 +50,7 @@ const UserLogin=() => {
                     required
                     value={email}
                     onChange={(e) => {
-                    setEmail(e.target.value)
+                        setEmail(e.target.value)
                     }}
                     className='bg-[#eeeeee] mb-7 rounded-lg px-4 py-2 border w-full text-lg placeholder:text-base'
                     type="email"
@@ -61,7 +62,7 @@ const UserLogin=() => {
                     className='bg-[#eeeeee] mb-7 rounded-lg px-4 py-2 border w-full text-lg placeholder:text-base'
                     value={password}
                     onChange={(e) => {
-                    setPassword(e.target.value)
+                        setPassword(e.target.value)
                     }}
                     required type="password"
                     placeholder='password'

@@ -1,8 +1,8 @@
-// import React from "react";
+import React from "react";
 import { useState } from 'react'
-import { Link,  } from 'react-router-dom'
-// import axios from 'axios'
-// import { UserDataContext } from '../context/UserContext'
+import { Link,useNavigate  } from 'react-router-dom'
+import axios from 'axios'
+import { UserDataContext } from '../context/UserContext'
 
 
 const UserSignup=() => {
@@ -13,33 +13,41 @@ const UserSignup=() => {
     const [ userData, setUserData ] = useState({})
 
 
+    const navigate = useNavigate()
+
+
+    const { user, setUser } = React.useContext(UserDataContext)
+
+
     const submitHandler = async (e) => {
         e.preventDefault()
-        setUserData ({
+        const newUser = {
+            fullname: {
+                firstname: firstName,
+                lastname: lastName
+            },
+            email: email,
+            password: password
+        }
+        try {
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/register`, newUser);
             
-                fullname: {
-                    firstname: firstName,
-                    lastname: lastName
-                    },
-                    email: email,
-                    password: password
+            if (response.status === 201) {
+                const data = response.data;
+                setUser(data.user);
+                localStorage.setItem('token', data.token)
+                navigate('/home');
+            }
             
-        });
+            // Clear form fields
+            setEmail('');
+            setFirstName('');
+            setLastName('');
+            setPassword('');
     
-        // const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/register`, newUser)
-    
-        // if (response.status === 201) {
-        //     const data = response.data
-        //     setUser(data.user)
-        //     localStorage.setItem('token', data.token)
-        //     navigate('/home')
-        // }
-    
-    
-        setEmail('')
-        setFirstName('')
-        setLastName('')
-        setPassword('')
+        } catch (error) {
+            console.error("Registration failed:", error.response?.data || error.message);
+        }
     
     }
 

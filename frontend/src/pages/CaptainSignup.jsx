@@ -1,12 +1,12 @@
-import  { useState } from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-// import { CaptainDataContext } from '../context/CapatainContext'
-// import { useNavigate }  from 'react-router-dom'
-// import axios from 'axios'
+import { CaptainDataContext } from '../context/CapatainContext'
+import { useNavigate }  from 'react-router-dom'
+import axios from 'axios'
 
 const CaptainSignup = () => {
 
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
 
   const [ email, setEmail ] = useState('')
   const [ password, setPassword ] = useState('')
@@ -19,12 +19,12 @@ const CaptainSignup = () => {
   const [ vehicleType, setVehicleType ] = useState('')
 
 
-  const { captain, setCaptain } = useState({})/*React.useContext(CaptainDataContext)*/
+  const { captain, setCaptain } = React.useContext(CaptainDataContext)
 
 
   const submitHandler = async (e) => {
     e.preventDefault()
-    setCaptain( {
+    const captainData = {
       fullname: {
         firstname: firstName,
         lastname: lastName
@@ -34,19 +34,28 @@ const CaptainSignup = () => {
       vehicle: {
         color: vehicleColor,
         plate: vehiclePlate,
-        capacity: vehicleCapacity,
+        capacity: Number(vehicleCapacity),
         vehicleType: vehicleType
       }
-    });
+    };
 
-    // const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/register`, captainData)
+    console.log("Sending Data:", captainData);
 
-    // if (response.status === 201) {
-    //   const data = response.data
-    //   setCaptain(data.captain)
-    //   localStorage.setItem('token', data.token)
-    //   navigate('/captain-home')
-    // }
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/register`, captainData);
+      console.log(" Server response:", response.data);
+  
+      if (response.status === 201) {
+        const data = response.data
+        setCaptain(data.captain)
+        localStorage.setItem('token', data.token)
+        navigate('/captain-home')
+      }
+    } catch (error) {
+      console.error(" Signup failed:", error.response?.data || error.message);
+      alert("Error: " + JSON.stringify(error.response?.data)); // Show full server error
+    }
+    
 
     setEmail('')
     setFirstName('')
@@ -160,7 +169,7 @@ const CaptainSignup = () => {
               <option value="" disabled>Select Vehicle Type</option>
               <option value="car">Car</option>
               <option value="auto">Auto</option>
-              <option value="moto">Moto</option>
+              <option value="motorcycle">motorcycle</option>
             </select>
           </div>
 
