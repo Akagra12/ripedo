@@ -1,14 +1,13 @@
-import  React,{ useState } from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { CaptainDataContext } from '../context/CapatainContext'
-
+import logo from '../logo/logobg.png'; // Adjust the path based on your file location
 const Captainlogin = () => {
 
   const [ email, setEmail ] = useState('')
   const [ password, setPassword ] = useState('')
-  // const [ captainData, setCaptainData ] = useState({})
 
   const { captain, setCaptain } = React.useContext(CaptainDataContext)
   const navigate = useNavigate()
@@ -17,36 +16,30 @@ const Captainlogin = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    const captain ={
+    const captain = {
       email: email,
       password
     }
-    
 
     const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/login`, captain)
-    try{
 
     if (response.status === 200) {
       const data = response.data
+
       setCaptain(data.captain)
       localStorage.setItem('token', data.token)
       navigate('/captain-home')
 
     }
-  } catch (error) {
-    console.error(" Signup failed:", error.response?.data || error.message);
-    alert("Error: " + JSON.stringify(error.response?.data)); // Show full server error
-  }
-    
 
     setEmail('')
     setPassword('')
   }
   return (
-    <div className="p-7 bg-white h-screen flex flex-col justify-between">
+    <div className='p-7 h-screen flex flex-col justify-between'>
       <div>
-        <img className='w-20 mb-3' src="https://www.svgrepo.com/show/505031/uber-driver.svg" alt="" />
-
+      {/* <h1 className='text-black text-3xl font-bold mb-3'>EduRide</h1> */}
+        <img src={logo} alt="EduRide Logo" className="ml-4 w-40 h-auto object-contain" />
         <form onSubmit={(e) => {
           submitHandler(e)
         }}>

@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { CaptainDataContext } from '../context/CapatainContext'
-import { useNavigate }  from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import logo from '../logo/logobg.png'; // Adjust the path based on your file location
 
 const CaptainSignup = () => {
 
@@ -34,28 +35,19 @@ const CaptainSignup = () => {
       vehicle: {
         color: vehicleColor,
         plate: vehiclePlate,
-        capacity: Number(vehicleCapacity),
+        capacity: vehicleCapacity,
         vehicleType: vehicleType
       }
-    };
-
-    console.log("Sending Data:", captainData);
-
-    try {
-      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/register`, captainData);
-      console.log(" Server response:", response.data);
-  
-      if (response.status === 201) {
-        const data = response.data
-        setCaptain(data.captain)
-        localStorage.setItem('token', data.token)
-        navigate('/captain-home')
-      }
-    } catch (error) {
-      console.error(" Signup failed:", error.response?.data || error.message);
-      alert("Error: " + JSON.stringify(error.response?.data)); // Show full server error
     }
-    
+
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/register`, captainData)
+
+    if (response.status === 201) {
+      const data = response.data
+      setCaptain(data.captain)
+      localStorage.setItem('token', data.token)
+      navigate('/captain-home')
+    }
 
     setEmail('')
     setFirstName('')
@@ -68,15 +60,15 @@ const CaptainSignup = () => {
 
   }
   return (
-    <div className='py-5 px-5 h-screen bg-white flex flex-col justify-between'>
+    <div className='py-5 px-5 h-screen flex flex-col justify-between'>
       <div>
-        <img className='w-20 mb-3' src="https://www.svgrepo.com/show/505031/uber-driver.svg" alt="" />
+        <img className='w-20 mb-5' src={logo} alt="" />
 
         <form onSubmit={(e) => {
           submitHandler(e)
         }}>
 
-          <h3 className='text-lg w-full  font-medium mb-2'>What`s our Captain`s name</h3>
+          <h3 className='text-lg w-full  font-medium mb-2'>What's our Captain's name</h3>
           <div className='flex gap-4 mb-7'>
             <input
               required
@@ -100,7 +92,7 @@ const CaptainSignup = () => {
             />
           </div>
 
-          <h3 className='text-lg font-medium mb-2'>What`s our Captain`s email</h3>
+          <h3 className='text-lg font-medium mb-2'>What's our Captain's email</h3>
           <input
             required
             value={email}
@@ -169,7 +161,7 @@ const CaptainSignup = () => {
               <option value="" disabled>Select Vehicle Type</option>
               <option value="car">Car</option>
               <option value="auto">Auto</option>
-              <option value="motorcycle">motorcycle</option>
+              <option value="moto">Moto</option>
             </select>
           </div>
 

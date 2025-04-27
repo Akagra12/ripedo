@@ -34,3 +34,8 @@ module.exports = router;
         "__v": 0
     }
 }
+
+{fullname: { firstname: 'test', lastname: 'test' },
+  email: 'test#123@test.com',
+  password: 'test@#123'
+}
